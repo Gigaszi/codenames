@@ -12,6 +12,9 @@ import { WordTile, Role } from '../models/word-tile.model';
 export class BoardComponent implements OnInit {
   tiles: WordTile[] = [];
   teamView: Role | null = null;
+  gameOver: boolean = false;
+  winner: Role | null = null;
+  message: string = '';
 
   private allWords: string[] = [
     'apple', 'moon', 'pyramid', 'robot', 'jazz', 'snow', 'crystal', 'banana', 'ninja', 'castle',
@@ -39,10 +42,40 @@ export class BoardComponent implements OnInit {
       role: roles[i],
       revealed: false
     }));
+
+    this.gameOver = false;
+    this.winner = null;
+    this.message = '';
   }
 
   reveal(tile: WordTile): void {
+    if (this.gameOver || tile.revealed) return;
+
     tile.revealed = true;
+
+    if (tile.role === 'assassin') {
+      this.gameOver = true;
+      this.message = `Game Over! The assassin was revealed.`;
+      this.winner = tile.role;
+      return;
+    }
+
+    this.checkWinCondition();
+  }
+
+  checkWinCondition(): void {
+    const redLeft = this.tiles.filter(t => t.role === 'red' && !t.revealed).length;
+    const blueLeft = this.tiles.filter(t => t.role === 'blue' && !t.revealed).length;
+
+    if (redLeft === 0) {
+      this.winner = 'red';
+      this.gameOver = true;
+      this.message = 'Red team wins!';
+    } else if (blueLeft === 0) {
+      this.winner = 'blue';
+      this.gameOver = true;
+      this.message = 'Blue team wins!';
+    }
   }
 
   toggleView(team: Role): void {
@@ -57,5 +90,9 @@ export class BoardComponent implements OnInit {
       case 'neutral': return 'tan';
       case 'assassin': return 'black';
     }
+  }
+
+  restart(): void {
+    this.generateBoard();
   }
 }

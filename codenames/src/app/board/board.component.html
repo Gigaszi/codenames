@@ -3,7 +3,7 @@
   <button (click)="toggleView('blue')">Toggle Blue View</button>
 </div>
 
-<div class="grid">
+<div class="grid" [class.disabled]="gameOver">
   <div
     class="tile"
     *ngFor="let tile of tiles"
@@ -11,5 +11,13 @@
     (click)="reveal(tile)"
   >
     <span>{{ tile.word }}</span>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="gameOver">
+  <div class="modal-content">
+    <h2>{{ message }}</h2>
+    <button (click)="restart()">Play Again</button>
   </div>
 </div>
