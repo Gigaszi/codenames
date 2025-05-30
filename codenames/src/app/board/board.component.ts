@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WordTile, Role } from '../models/word-tile.model';
+import {WordSetService} from "../word-set.service";
 
 @Component({
   selector: 'app-board',
@@ -16,16 +17,17 @@ export class BoardComponent implements OnInit {
   winner: Role | null = null;
   message: string = '';
 
-  wordSets: Record<string, string[]> = {
-    "Classic": ['apple', 'moon', 'pyramid', 'robot', 'jazz', 'snow', 'crystal', 'banana', 'ninja', 'castle', 'dragon', 'pirate', 'satellite', 'star', 'river', 'mountain', 'piano', 'book', 'forest', 'light', 'shadow', 'king', 'queen', 'magic', 'code', 'volcano', 'ghost', 'clock', 'beach', 'desert', 'vampire', 'penguin', 'diamond'],
-    "Tech": ['router', 'server', 'circuit', 'cache', 'python', 'compiler', 'binary', 'array', 'loop', 'stack', 'queue', 'object', 'class', 'lambda', 'kernel', 'cloud', 'byte', 'debug', 'bit', 'node', 'script', 'logic', 'token', 'input', 'output'],
-    "Nature": ['tree', 'river', 'stone', 'animal', 'leaf', 'mountain', 'sky', 'wind', 'cloud', 'sun', 'rain', 'desert', 'volcano', 'ocean', 'stream', 'valley', 'island', 'cave', 'forest', 'snow', 'moss', 'cliff', 'thunder', 'lake', 'tide']
-  };
+  wordSets: Record<string, string[]> = {};
   selectedSet: string | null = null;
 
   protected imageUrl: string = '';
 
+  constructor(private wordSetService: WordSetService) {}
+
   ngOnInit(): void {
+    this.wordSetService.getWordSets().subscribe((sets) => {
+        this.wordSets = sets;
+      });
     this.generateBoard();
   }
 
