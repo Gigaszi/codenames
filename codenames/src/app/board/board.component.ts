@@ -22,6 +22,7 @@ export class BoardComponent implements OnInit {
     'light', 'shadow', 'king', 'queen', 'magic', 'code', 'volcano', 'ghost', 'clock', 'beach',
     'desert', 'vampire', 'penguin', 'diamond'
   ];
+  protected imageUrl: string = '';
 
   ngOnInit(): void {
     this.generateBoard();
@@ -55,8 +56,8 @@ export class BoardComponent implements OnInit {
 
     if (tile.role === 'assassin') {
       this.gameOver = true;
-      this.message = `Game Over! The assassin was revealed.`;
-      this.winner = tile.role;
+      this.message = `💀 Game Over! The assassin was revealed.`;
+      this.imageUrl = 'assets/lose.png';
       return;
     }
 
@@ -70,13 +71,16 @@ export class BoardComponent implements OnInit {
     if (redLeft === 0) {
       this.winner = 'red';
       this.gameOver = true;
-      this.message = 'Red team wins!';
+      this.message = '🎉 Red team wins!';
+      this.imageUrl = 'assets/win.png';
     } else if (blueLeft === 0) {
       this.winner = 'blue';
       this.gameOver = true;
-      this.message = 'Blue team wins!';
+      this.message = '🎉 Blue team wins!';
+      this.imageUrl = 'assets/win.png';
     }
   }
+
 
   toggleView(team: Role): void {
     this.teamView = this.teamView === team ? null : team;
