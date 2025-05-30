@@ -1,0 +1,23 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+.tile {
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+}
+.controls {
+  text-align: center;
+  margin-top: 20px;
+}
+button {
+  margin: 0 10px;
+  padding: 8px 16px;
+}
