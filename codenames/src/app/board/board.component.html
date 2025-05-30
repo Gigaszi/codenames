@@ -1,25 +1,39 @@
-<div class="controls">
-  <button (click)="toggleView('red')">Toggle Red View</button>
-  <button (click)="toggleView('blue')">Toggle Blue View</button>
+<!-- Set Selection -->
+<div *ngIf="!selectedSet" class="start-screen">
+  <h2>Select a Word Set</h2>
+  <ul>
+    <li *ngFor="let setName of wordSets | keyvalue">
+      <button (click)="startGame(setName.key)">
+        {{ setName.key }}
+      </button>
+    </li>
+  </ul>
 </div>
 
-<div class="grid" [class.disabled]="gameOver">
-  <div
-    class="tile"
-    *ngFor="let tile of tiles"
-    [style.backgroundColor]="getColor(tile)"
-    (click)="reveal(tile)"
-  >
-    <span>{{ tile.word }}</span>
+<!-- Game Board -->
+<div *ngIf="selectedSet">
+  <div class="controls">
+    <button (click)="toggleView('red')">Toggle Red View</button>
+    <button (click)="toggleView('blue')">Toggle Blue View</button>
+    <button (click)="restart()">Restart</button>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal" *ngIf="gameOver">
-  <div class="modal-content">
-    <h2>{{ message }}</h2>
-    <img *ngIf="imageUrl" [src]="imageUrl" alt="Game result" class="modal-image">
-    <br />
-    <button (click)="restart()">Play Again</button>
+  <div class="grid" [class.disabled]="gameOver">
+    <div
+      class="tile"
+      *ngFor="let tile of tiles"
+      [style.backgroundColor]="getColor(tile)"
+      (click)="reveal(tile)"
+    >
+      <span>{{ tile.word }}</span>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="gameOver">
+    <div class="modal-content">
+      <h2>{{ message }}</h2>
+      <img *ngIf="imageUrl" [src]="imageUrl" alt="Result" class="modal-image" />
+      <button (click)="restart()">Play Again</button>
+    </div>
   </div>
 </div>

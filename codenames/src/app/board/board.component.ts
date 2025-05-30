@@ -16,20 +16,34 @@ export class BoardComponent implements OnInit {
   winner: Role | null = null;
   message: string = '';
 
-  private allWords: string[] = [
-    'apple', 'moon', 'pyramid', 'robot', 'jazz', 'snow', 'crystal', 'banana', 'ninja', 'castle',
-    'dragon', 'pirate', 'satellite', 'star', 'river', 'mountain', 'piano', 'book', 'forest',
-    'light', 'shadow', 'king', 'queen', 'magic', 'code', 'volcano', 'ghost', 'clock', 'beach',
-    'desert', 'vampire', 'penguin', 'diamond'
-  ];
+  wordSets: Record<string, string[]> = {
+    "Classic": ['apple', 'moon', 'pyramid', 'robot', 'jazz', 'snow', 'crystal', 'banana', 'ninja', 'castle', 'dragon', 'pirate', 'satellite', 'star', 'river', 'mountain', 'piano', 'book', 'forest', 'light', 'shadow', 'king', 'queen', 'magic', 'code', 'volcano', 'ghost', 'clock', 'beach', 'desert', 'vampire', 'penguin', 'diamond'],
+    "Tech": ['router', 'server', 'circuit', 'cache', 'python', 'compiler', 'binary', 'array', 'loop', 'stack', 'queue', 'object', 'class', 'lambda', 'kernel', 'cloud', 'byte', 'debug', 'bit', 'node', 'script', 'logic', 'token', 'input', 'output'],
+    "Nature": ['tree', 'river', 'stone', 'animal', 'leaf', 'mountain', 'sky', 'wind', 'cloud', 'sun', 'rain', 'desert', 'volcano', 'ocean', 'stream', 'valley', 'island', 'cave', 'forest', 'snow', 'moss', 'cliff', 'thunder', 'lake', 'tide']
+  };
+  selectedSet: string | null = null;
+
   protected imageUrl: string = '';
 
   ngOnInit(): void {
     this.generateBoard();
   }
 
+  startGame(setName: string): void {
+    this.selectedSet = setName;
+    this.generateBoard();
+  }
+
+  restart(): void {
+    this.generateBoard();
+  }
+
+
   generateBoard(): void {
-    const shuffledWords = [...this.allWords].sort(() => Math.random() - 0.5).slice(0, 25);
+    if (!this.selectedSet) return;
+
+    const wordPool = this.wordSets[this.selectedSet];
+    const shuffledWords = [...wordPool].sort(() => Math.random() - 0.5).slice(0, 25);
 
     const roles: Role[] = [
       ...Array(9).fill('red'),
@@ -47,7 +61,9 @@ export class BoardComponent implements OnInit {
     this.gameOver = false;
     this.winner = null;
     this.message = '';
+    this.imageUrl = '';
   }
+
 
   reveal(tile: WordTile): void {
     if (this.gameOver || tile.revealed) return;
@@ -71,12 +87,12 @@ export class BoardComponent implements OnInit {
     if (redLeft === 0) {
       this.winner = 'red';
       this.gameOver = true;
-      this.message = '🎉 Red team wins!';
+      this.message = 'Red team wins!';
       this.imageUrl = 'assets/win.png';
     } else if (blueLeft === 0) {
       this.winner = 'blue';
       this.gameOver = true;
-      this.message = '🎉 Blue team wins!';
+      this.message = 'Blue team wins!';
       this.imageUrl = 'assets/win.png';
     }
   }
@@ -94,9 +110,5 @@ export class BoardComponent implements OnInit {
       case 'neutral': return 'tan';
       case 'assassin': return 'black';
     }
-  }
-
-  restart(): void {
-    this.generateBoard();
   }
 }

@@ -49,3 +49,13 @@ button {
 .modal-content h2 {
   margin-bottom: 20px;
 }
+
+.start-screen {
+  text-align: center;
+  margin-top: 50px;
+}
+.start-screen button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+}
